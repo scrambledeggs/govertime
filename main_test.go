@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestGovertime(t *testing.T) {
-	t.Run("it should be able to parse arguments", func(t *testing.T) {
+	t.Run("should be able to parse arguments", func(t *testing.T) {
 		args := []string{
 			"jett",
 			"06-27-2023",
@@ -14,9 +14,21 @@ func TestGovertime(t *testing.T) {
 		}
 
 		want := "Successfully recorded!"
-		resp := govertime(args)
+		resp, _ := govertime(args)
 		if resp != want {
 			t.Errorf("Expecting '%s', but got %s", want, resp)
+		}
+	})
+
+	t.Run("should fail if arguments are lacking", func(t *testing.T) {
+		args := []string{
+			"hohoho",
+			"look at me im lacking",
+		}
+
+		_, err := govertime(args)
+		if err == nil {
+			t.Errorf("must error with incomplete arguments")
 		}
 	})
 
