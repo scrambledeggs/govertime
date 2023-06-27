@@ -31,8 +31,4 @@ func TestGovertime(t *testing.T) {
 			t.Errorf("must error with incomplete arguments")
 		}
 	})
-
-	t.Run("should be able to accept multiple name entries", func(t *testing.T) {
-
-	})
 }
