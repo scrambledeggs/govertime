@@ -7,9 +7,9 @@ func TestGovertime(t *testing.T) {
 		args := []string{
 			"jett",
 			"06-27-2023",
-			"1700",
+			"6:00PM",
 			"06-28-2023",
-			"0100",
+			"8:30PM",
 			"OP deployment",
 		}
 
@@ -35,9 +35,9 @@ func TestGovertime(t *testing.T) {
 		args := []string{
 			"jett,maw,wayne",
 			"06-27-2023",
-			"1700",
+			"11:00PM",
 			"06-28-2023",
-			"0100",
+			"12:00AM",
 			"OP deployment",
 		}
 
