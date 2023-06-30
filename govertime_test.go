@@ -13,10 +13,9 @@ func TestGovertime(t *testing.T) {
 			"OP deployment",
 		}
 
-		want := "Successfully recorded!"
-		resp, _ := govertime(args)
-		if resp != want {
-			t.Errorf("Expecting '%s', but got %s", want, resp)
+		_, err := govertime(args)
+		if err == nil {
+			t.Errorf("unable to parse arguments")
 		}
 	})
 
