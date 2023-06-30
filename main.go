@@ -46,7 +46,7 @@ func main() {
 			os.Exit(71)
 		}
 
-		fmt.Printf("Insert %d row!\n", rows)
+		fmt.Printf("Inserted %d row! %v\n", rows, v)
 	}
 
 	if err := db.Close(); err != nil {
