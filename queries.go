@@ -13,3 +13,5 @@ const CreateTableQuery string = `
 const InsertOvertimeQuery string = `
 INSERT INTO overtime VALUES(NULL, ?, ?, ?, ?, ?)
 `
+
+const ViewMonthOvertimeQuery string = `SELECT * from overtime`
