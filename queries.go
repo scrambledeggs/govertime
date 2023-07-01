@@ -10,3 +10,6 @@ const CreateTableQuery string = `
     reason TEXT NOT NULL
   );
 `
+const InsertOvertimeQuery string = `
+"INSERT INTO overtime VALUES(NULL, ?, ?, ?, ?, ?)"
+`

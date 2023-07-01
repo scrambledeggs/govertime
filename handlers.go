@@ -22,6 +22,7 @@ func handleFlags() bool {
 
 		// TODO: display table
 		fmt.Printf("Current OTs for the month\n")
+
 		return true
 	}
 

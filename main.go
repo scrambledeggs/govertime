@@ -23,13 +23,22 @@ func main() {
 	db := openSql()
 	defer db.Close()
 
-	executeQuery(db, CreateTableQuery)
+	if _, err := db.Exec(CreateTableQuery); err != nil {
+		fmt.Printf("Encountered error while executing the query.\nQuery: %s\nError:%s\n", CreateTableQuery, err.Error())
+		os.Exit(SQLQueryError)
+	}
 
 	for _, v := range ot {
-		res := executeQuery(db, "INSERT INTO overtime VALUES(NULL, ?, ?, ?, ?, ?)", v.Name, v.TimeIn, v.TimeOut, v.HoursOT, v.Reason)
+		res, err := db.Exec(InsertOvertimeQuery, v.Name, v.TimeIn, v.TimeOut, v.HoursOT, v.Reason)
+		if err != nil {
+			fmt.Printf("Encountered error while executing the query.\nQuery: %s\nError:%s\n", CreateTableQuery, err.Error())
+			os.Exit(SQLQueryError)
+		}
+
 		rows, err := res.RowsAffected()
 		if err != nil {
 			fmt.Printf("Failed to insert record. Error %s", err.Error())
+			os.Exit(SQLQueryError)
 		}
 
 		fmt.Printf("Inserted %d row! %v\n", rows, v)
