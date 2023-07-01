@@ -6,6 +6,9 @@ import (
 )
 
 func handleFlags() bool {
+	db := openSql()
+	defer db.Close()
+
 	lsPtr := flag.Bool("ls", false, "List all overtime for the current month")
 	gdtbPtr := flag.Bool("gdtb", false, "Include 30/31 from prev month")
 
