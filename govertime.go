@@ -21,6 +21,7 @@ func govertime(args []string) ([]Overtime, error) {
 	}
 
 	names := args[0]
+	names = strings.ReplaceAll(names, " ", "")
 	entries := strings.Split(names, ",")
 
 	overtimes := make([]Overtime, 0, len(entries))
