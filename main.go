@@ -19,6 +19,11 @@ const create string = `
 `
 
 func main() {
+	shouldExit := handleFlags()
+	if shouldExit {
+		return
+	}
+
 	args := os.Args[1:]
 	ot, err := govertime(args)
 	if err != nil {
