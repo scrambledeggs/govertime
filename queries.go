@@ -11,5 +11,5 @@ const CreateTableQuery string = `
   );
 `
 const InsertOvertimeQuery string = `
-"INSERT INTO overtime VALUES(NULL, ?, ?, ?, ?, ?)"
+INSERT INTO overtime VALUES(NULL, ?, ?, ?, ?, ?)
 `

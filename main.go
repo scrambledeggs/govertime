@@ -31,7 +31,7 @@ func main() {
 	for _, v := range ot {
 		res, err := db.Exec(InsertOvertimeQuery, v.Name, v.TimeIn, v.TimeOut, v.HoursOT, v.Reason)
 		if err != nil {
-			fmt.Printf("Encountered error while executing the query.\nQuery: %s\nError:%s\n", CreateTableQuery, err.Error())
+			fmt.Printf("Encountered error while executing the query.\nQuery: %s\nError:%s\n", InsertOvertimeQuery, err.Error())
 			os.Exit(SQLQueryError)
 		}
 
