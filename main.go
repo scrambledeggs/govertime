@@ -25,7 +25,6 @@ func main() {
 		fmt.Printf("encountered error: %s", err.Error())
 		os.Exit(69)
 	}
-	fmt.Printf("Overtime Obj %v\n", ot)
 
 	db, err := sql.Open("sqlite", "database.db")
 	if err != nil {
