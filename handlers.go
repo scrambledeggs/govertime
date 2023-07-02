@@ -56,15 +56,15 @@ func handleFlags() bool {
 
 	lsPtr := flag.Bool("ls", false, "List all overtime for the current month")
 	gdtbPtr := flag.Bool("gdtb", false, "Include 29/30/31 from prev month")
+	namesPtr := flag.String("names", "all", "Filter list by name")
 
 	flag.Parse()
 
 	if *lsPtr {
-		names := os.Args[3:]
-		hasNames := len(names) > 0
+		hasNames := *namesPtr != "all"
 
 		if hasNames {
-			strName := names[0]
+			strName := *namesPtr
 			strName = strings.ReplaceAll(strName, " ", "")
 			arrNames := strings.Split(strName, ",")
 

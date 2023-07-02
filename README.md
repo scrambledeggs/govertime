@@ -21,7 +21,7 @@ go build
 ./govertime -ls -gdtb
 
 # List Overtimes for the Month + Prev Month 29/30/31 for a specific user
-./govertime -ls -gdtb [user]
+./govertime -ls -gdtb -names [users]
 
 # Export to CSV
 ./govertime -e [path]
@@ -31,7 +31,7 @@ go build
 
 ```bash
 ./govertime "alec,wayne,luis" 07-03-2023 10:00PM 07-04-2023 12:00AM "Fixed bugs for GCash MP"
-./govertime -ls -gdtb "cheks"
+./govertime -ls -gdtb -names "cheks"
 ```
 
 ### Params
