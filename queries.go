@@ -24,5 +24,16 @@ WHERE
   time_in BETWEEN DATE('now','start of month') AND DATE('now', 'start of month', '+1 month', '-1 day')
   AND name IN (%s)
 ORDER BY
-  time_in ASC
+  time_in ASC,
+  name ASC
+`
+
+const ViewMonthGetDatThirtyBroOvertimeQueryFmt string = `
+SELECT * from overtimes
+WHERE 
+  time_in BETWEEN DATE('now','start of month', '-2 day') AND DATE('now', 'start of month', '+1 month', '-1 day')
+  AND name IN (%s)
+ORDER BY
+  time_in ASC,
+  name ASC
 `

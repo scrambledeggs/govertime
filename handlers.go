@@ -60,7 +60,7 @@ func handleFlags() bool {
 	flag.Parse()
 
 	if *lsPtr {
-		names := os.Args[2:]
+		names := os.Args[3:]
 		hasNames := len(names) > 0
 
 		if hasNames {
@@ -76,6 +76,9 @@ func handleFlags() bool {
 			}
 
 			finalQuery := fmt.Sprintf(ViewMonthOvertimeWithNamesQueryFmt, strings.Join(placeholders, ","))
+			if *gdtbPtr {
+				finalQuery = fmt.Sprintf(ViewMonthGetDatThirtyBroOvertimeQueryFmt, strings.Join(placeholders, ","))
+			}
 
 			rows, err := db.Query(finalQuery, sqlNames...)
 			handleQueryOutput(rows, err)
