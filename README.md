@@ -17,10 +17,10 @@ go build
 # List Overtimes for the Month
 ./govertime -ls
 
-# List Overtimes for the Month + Prev Month 30/31
+# List Overtimes for the Month + Prev Month 29/30/31
 ./govertime -ls -gdtb
 
-# List Overtimes for the Month + Prev Month 30/31 for a specific user
+# List Overtimes for the Month + Prev Month 29/30/31 for a specific user
 ./govertime -ls -gdtb [user]
 
 # Export to CSV
