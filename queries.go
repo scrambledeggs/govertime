@@ -1,7 +1,7 @@
 package main
 
 const CreateTableQuery string = `
-  CREATE TABLE IF NOT EXISTS overtime (
+  CREATE TABLE IF NOT EXISTS overtimes (
     id INTEGER NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
     time_in TEXT NOT NULL,
@@ -11,7 +11,9 @@ const CreateTableQuery string = `
   );
 `
 const InsertOvertimeQuery string = `
-INSERT INTO overtime VALUES(NULL, ?, ?, ?, ?, ?)
+INSERT INTO overtimes VALUES(NULL, ?, ?, ?, ?, ?)
 `
 
-const ViewMonthOvertimeQuery string = `SELECT * from overtime`
+const ViewMonthOvertimeQuery string = `SELECT * from overtimes WHERE time_in BETWEEN DATE('now','start of month') AND DATE('now', 'start of month', '+1 month', '-1 day') ORDER BY time_in ASC`
+
+const ViewMonthGetDatThirtyBroOvertimeQuery string = `SELECT * from overtimes WHERE time_in BETWEEN DATE('now','start of month', '-2 day') AND DATE('now', 'start of month', '+1 month', '-1 day') ORDER BY time_in ASC`

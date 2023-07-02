@@ -36,6 +36,13 @@ func printTable(rows *sql.Rows) {
 	table.Render()
 }
 
+func handlerQueryError(err error, query string) {
+	if err != nil {
+		fmt.Printf("Encountered error while executing the query.\nQuery: %s\nError:%s\n", query, err.Error())
+		os.Exit(SQLQueryError)
+	}
+}
+
 func handleFlags() bool {
 	db := openSql()
 	defer db.Close()
@@ -47,14 +54,15 @@ func handleFlags() bool {
 
 	if *lsPtr {
 		if *gdtbPtr {
-			fmt.Printf("Current OTs for the month + 30/31\n")
+			rows, err := db.Query(ViewMonthGetDatThirtyBroOvertimeQuery)
+			handlerQueryError(err, ViewMonthGetDatThirtyBroOvertimeQuery)
+			defer rows.Close()
+			printTable(rows)
 			return true
 		}
 
 		rows, err := db.Query(ViewMonthOvertimeQuery)
-		if err != nil {
-			fmt.Printf("Encountered error while executing the query.\nQuery: %s\nError:%s\n", ViewMonthOvertimeQuery, err.Error())
-		}
+		handlerQueryError(err, ViewMonthOvertimeQuery)
 		defer rows.Close()
 		printTable(rows)
 
@@ -76,16 +84,13 @@ func handleInsert() {
 	defer db.Close()
 
 	if _, err := db.Exec(CreateTableQuery); err != nil {
-		fmt.Printf("Encountered error while executing the query.\nQuery: %s\nError:%s\n", CreateTableQuery, err.Error())
+		handlerQueryError(err, CreateTableQuery)
 		os.Exit(SQLQueryError)
 	}
 
 	for _, v := range ot {
 		res, err := db.Exec(InsertOvertimeQuery, v.Name, v.TimeIn, v.TimeOut, v.HoursOT, v.Reason)
-		if err != nil {
-			fmt.Printf("Encountered error while executing the query.\nQuery: %s\nError:%s\n", InsertOvertimeQuery, err.Error())
-			os.Exit(SQLQueryError)
-		}
+		handlerQueryError(err, InsertOvertimeQuery)
 
 		rows, err := res.RowsAffected()
 		if err != nil {
