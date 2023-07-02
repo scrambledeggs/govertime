@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/olekukonko/tablewriter"
 )
@@ -36,11 +37,17 @@ func printTable(rows *sql.Rows) {
 	table.Render()
 }
 
-func handlerQueryError(err error, query string) {
+func handleQueryError(err error, query string) {
 	if err != nil {
 		fmt.Printf("Encountered error while executing the query.\nQuery: %s\nError:%s\n", query, err.Error())
 		os.Exit(SQLQueryError)
 	}
+}
+
+func handleQueryOutput(rows *sql.Rows, err error) {
+	handleQueryError(err, ViewMonthGetDatThirtyBroOvertimeQuery)
+	printTable(rows)
+	rows.Close()
 }
 
 func handleFlags() bool {
@@ -53,18 +60,37 @@ func handleFlags() bool {
 	flag.Parse()
 
 	if *lsPtr {
+		names := os.Args[2:]
+		hasNames := len(names) > 0
+
+		if hasNames {
+			strName := names[0]
+			strName = strings.ReplaceAll(strName, " ", "")
+			arrNames := strings.Split(strName, ",")
+
+			sqlNames := make([]interface{}, 0, len(arrNames))
+			placeholders := make([]string, 0, len(arrNames))
+			for _, v := range arrNames {
+				placeholders = append(placeholders, "?")
+				sqlNames = append(sqlNames, v)
+			}
+
+			finalQuery := fmt.Sprintf(ViewMonthOvertimeWithNamesQueryFmt, strings.Join(placeholders, ","))
+
+			rows, err := db.Query(finalQuery, sqlNames...)
+			handleQueryOutput(rows, err)
+
+			return true
+		}
+
 		if *gdtbPtr {
 			rows, err := db.Query(ViewMonthGetDatThirtyBroOvertimeQuery)
-			handlerQueryError(err, ViewMonthGetDatThirtyBroOvertimeQuery)
-			defer rows.Close()
-			printTable(rows)
+			handleQueryOutput(rows, err)
 			return true
 		}
 
 		rows, err := db.Query(ViewMonthOvertimeQuery)
-		handlerQueryError(err, ViewMonthOvertimeQuery)
-		defer rows.Close()
-		printTable(rows)
+		handleQueryOutput(rows, err)
 
 		return true
 	}
@@ -84,13 +110,13 @@ func handleInsert() {
 	defer db.Close()
 
 	if _, err := db.Exec(CreateTableQuery); err != nil {
-		handlerQueryError(err, CreateTableQuery)
+		handleQueryError(err, CreateTableQuery)
 		os.Exit(SQLQueryError)
 	}
 
 	for _, v := range ot {
 		res, err := db.Exec(InsertOvertimeQuery, v.Name, v.TimeIn, v.TimeOut, v.HoursOT, v.Reason)
-		handlerQueryError(err, InsertOvertimeQuery)
+		handleQueryError(err, InsertOvertimeQuery)
 
 		rows, err := res.RowsAffected()
 		if err != nil {
