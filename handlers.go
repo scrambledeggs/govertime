@@ -11,8 +11,23 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
+func handleFilePath(filepath string) (*os.File, error) {
+	if strings.Contains(filepath, "/") {
+		path := strings.Split(filepath, "/")
+		path = path[:len(path)-1]
+		finalPath := strings.Join(path, "/")
+		err := os.MkdirAll(finalPath, 0755)
+
+		if err != nil {
+			fmt.Printf("encountered error while writing directory. %s", err.Error())
+			os.Exit(FileDirectoryError)
+		}
+	}
+	return os.Create(filepath)
+}
+
 func exportToCsv(rows *sql.Rows, filepath string) {
-	file, err := os.Create(filepath)
+	file, err := handleFilePath(filepath)
 	if err != nil {
 		fmt.Printf("encountered error while creating file. %s", err.Error())
 	}
