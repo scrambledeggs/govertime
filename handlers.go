@@ -72,6 +72,8 @@ func exportToCsv(rows *sql.Rows, filepath string) {
 
 		writer.Write(record)
 	}
+
+	fmt.Printf("Succesfully exported! Path: %s\n", filepath)
 }
 
 func printTable(rows *sql.Rows) {
