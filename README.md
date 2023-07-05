@@ -32,6 +32,7 @@ go build
 ```bash
 ./govertime "alec,wayne,luis" 07-03-2023 10:00PM 07-04-2023 12:00AM "Fixed bugs for GCash MP"
 ./govertime -ls -gdtb -names "cheks"
+./govertime -ls -gdtb -names "abbae, geps, charles" -e "reports/june/DOS.csv"
 ```
 
 ### Params
