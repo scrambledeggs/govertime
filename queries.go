@@ -14,9 +14,9 @@ const InsertOvertimeQuery string = `
 INSERT INTO overtimes VALUES(NULL, ?, ?, ?, ?, ?)
 `
 
-const ViewMonthOvertimeQuery string = `SELECT * from overtimes WHERE time_in BETWEEN DATE('now','start of month') AND DATE('now', 'start of month', '+1 month', '-1 day') ORDER BY time_in ASC`
+const ViewMonthOvertimeQuery string = `SELECT * from overtimes WHERE time_in BETWEEN DATE('now','start of month') AND DATE('now', 'start of month', '+1 month', '-1 day') ORDER BY time_in ASC, time_out ASC`
 
-const ViewMonthGetDatThirtyBroOvertimeQuery string = `SELECT * from overtimes WHERE time_in BETWEEN DATE('now','start of month', '-2 day') AND DATE('now', 'start of month', '+1 month', '-1 day') ORDER BY time_in ASC`
+const ViewMonthGetDatThirtyBroOvertimeQuery string = `SELECT * from overtimes WHERE time_in BETWEEN DATE('now','start of month', '-2 day') AND DATE('now', 'start of month', '+1 month', '-1 day') ORDER BY time_in ASC, time_out ASC`
 
 const ViewMonthOvertimeWithNamesQueryFmt string = `
 SELECT * from overtimes
@@ -25,6 +25,7 @@ WHERE
   AND name IN (%s)
 ORDER BY
   time_in ASC,
+  time_out ASC,
   name ASC
 `
 
@@ -35,5 +36,6 @@ WHERE
   AND name IN (%s)
 ORDER BY
   time_in ASC,
+  time_out ASC,
   name ASC
 `
