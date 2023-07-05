@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/csv"
 	"flag"
 	"fmt"
 	"os"
@@ -9,6 +10,54 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 )
+
+func exportToCsv(rows *sql.Rows, filepath string) {
+	file, err := os.Create(filepath)
+	if err != nil {
+		fmt.Printf("encountered error while creating file. %s", err.Error())
+	}
+
+	writer := csv.NewWriter(file)
+
+	defer rows.Close()
+	defer file.Close()
+	defer writer.Flush()
+
+	columns, err := rows.Columns()
+	if err != nil {
+		fmt.Printf("encountered error while reading columns. %s\n", err.Error())
+	}
+
+	writer.Write(columns)
+
+	for rows.Next() {
+		values := make([]interface{}, len(columns))
+		scanArgs := make([]interface{}, len(columns))
+
+		for i := range values {
+			scanArgs[i] = &values[i]
+		}
+
+		if err := rows.Scan(scanArgs...); err != nil {
+			fmt.Printf("error while scanning rows. %s\n", err.Error())
+		}
+
+		record := make([]string, 0)
+
+		for _, value := range values {
+			switch v := value.(type) {
+			case nil:
+				record = append(record, "")
+			case []byte:
+				record = append(record, string(v))
+			default:
+				record = append(record, fmt.Sprintf("%v", v))
+			}
+		}
+
+		writer.Write(record)
+	}
+}
 
 func printTable(rows *sql.Rows) {
 	columns, _ := rows.Columns()
@@ -57,6 +106,7 @@ func handleFlags() bool {
 	lsPtr := flag.Bool("ls", false, "List all overtime for the current month")
 	gdtbPtr := flag.Bool("gdtb", false, "Include 29/30/31 from prev month")
 	namesPtr := flag.String("names", "all", "Filter list by name")
+	exportPtr := flag.String("e", "", "export to csv")
 
 	flag.Parse()
 
@@ -81,20 +131,34 @@ func handleFlags() bool {
 			}
 
 			rows, err := db.Query(finalQuery, sqlNames...)
-			handleQueryOutput(rows, err)
+			if *exportPtr != "" {
+				exportToCsv(rows, *exportPtr)
+				return true
+			}
 
+			handleQueryOutput(rows, err)
 			return true
 		}
 
 		if *gdtbPtr {
 			rows, err := db.Query(ViewMonthGetDatThirtyBroOvertimeQuery)
+			if *exportPtr != "" {
+				exportToCsv(rows, *exportPtr)
+				return true
+			}
+
 			handleQueryOutput(rows, err)
 			return true
 		}
 
 		rows, err := db.Query(ViewMonthOvertimeQuery)
-		handleQueryOutput(rows, err)
 
+		if *exportPtr != "" {
+			exportToCsv(rows, *exportPtr)
+			return true
+		}
+
+		handleQueryOutput(rows, err)
 		return true
 	}
 
