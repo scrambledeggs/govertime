@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"math"
 	"strings"
 	"time"
 )
@@ -37,13 +38,14 @@ func govertime(args []string) ([]Overtime, error) {
 	}
 
 	hoursOt := timeOut.Sub(timeIn).Hours()
+	roundedHoursOt := math.Ceil(hoursOt*100) / 100
 
 	for _, v := range entries {
 		overtimes = append(overtimes, Overtime{
 			Name:    v,
 			TimeIn:  timeIn,
 			TimeOut: timeOut,
-			HoursOT: hoursOt,
+			HoursOT: roundedHoursOt,
 			Reason:  args[5],
 		})
 	}
